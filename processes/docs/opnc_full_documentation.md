@@ -26,22 +26,22 @@ The Certificate pools and the Certificate Provisioning Service are for publishin
 
 ## Further reading
 
- * [Abbreviations](./01_abbreviations.md)
- * [Business Processes](./02_PnC_business-processes.md)
- * [Publications and Repository Responsibilities](./03_publications-and-repository-responsibilities.md)
- * [Authentication](./04_authentication.md)
- * [Handling of IDs](./05_handling-of-ids.md)
+ * [Abbreviations](#list-of-abbreviations)
+ * [Business Processes](#business-processes)
+ * [Publications and Repository Responsibilities](#publications-and-repository-responsibilities)
+ * [Authentication](#authentication)
+ * [Handling of IDs](#handling-of-ids)
 
 ## System-Components
 
 This section describes the components of the Plug&Charge Ecosystem and their purpose of use.
 
-* [Root Certificate Pool (RCP)](./components/01_root-certificate-pool.md) – stores and distributes root certificates of all participating PKIs.
-* [Provisioning Certificate Pool (PCP)](./components/02_provisioning-certificate-pool.md) – stores OEM provisiong certificates and makes them available to the eMSPs.
-* [Certificate Provisioning Service (CPS)](./components/03_certificate-provisioning-service.md) – provisions contract certificates to prepare them to get installed in the EV.
-* [Contract Certificate Pool (CCP)](./components/04_contract-certificate-pool.md) – stores provisioned contract certificates waiting to get installed.
-* [Plug&Charge PKI Services](./components/05_v2g-pki-services.md)
-* [Plug&Charge Webhook Service](./components/06_webhook-service.md)
+* [Root Certificate Pool (RCP)](#root-certificate-pool) – stores and distributes root certificates of all participating PKIs.
+* [Provisioning Certificate Pool (PCP)](#provisioning-certificate-pool) – stores OEM provisiong certificates and makes them available to the eMSPs.
+* [Certificate Provisioning Service (CPS)](#certificate-provisioning-service) – provisions contract certificates to prepare them to get installed in the EV.
+* [Contract Certificate Pool (CCP)](#contract-certificate-pool) – stores provisioned contract certificates waiting to get installed.
+* [Plug&Charge PKI Services](#v2g-pki-services)
+* [Plug&Charge Webhook Service](#webhook-notification-service)
 
 
 ---
@@ -383,7 +383,7 @@ Other systems of a PnC Ecosystem use this pool as the mutual trust store.
 
 The root certificate pool offers a REST API to request registered root certificates.
 
-![RCP interfaces](../../assets/images/interfaces_rcp.png)
+![RCP interfaces](../assets/images/interfaces_rcp.png)
 
 The documenatation can be found at [rcp.v1.json](../../specification/apis/rcp/rcp.api.v1.json).
 
@@ -441,7 +441,7 @@ The Provisioning Certificates of each OEM are separated by access rules. The def
 
 The Provisioning Certificate Pool offers a REST API to request registered Provisioning Certificates.
 
-![PCP interfaces](../../assets/images/interfaces_pcp.png)
+![PCP interfaces](../assets/images/interfaces_pcp.png)
 
 All documentation can be found in the PCP API Schema at [pcp.v1.json](../../specification/apis/pcp/pcp.v1.json).
 
@@ -456,7 +456,7 @@ The Provisioning Certificate Pool (PCP) is involved in multiple processes across
 
 With the production of a vehicle, the OEM must create a Provisioning Certificate for the vehicle. Each Provisioning Certificate must have an unique Provisioning Certificate Identifier (PCID). The OEM then publishes this Provisioning Certificate as well as its certification chain by sending it to the Provisioning Certificate Pool.
 
-The PCID is the identifier for a vehicle and must match the ISO pattern [PCID Format](../05_handling-of-ids.md). The Provisioning Certificate Pool authorizes the OEM client based on this code. [see Data Access](#data-access)
+The PCID is the identifier for a vehicle and must match the ISO pattern [PCID Format](#pcid-provisioning-certificate-identifier). The Provisioning Certificate Pool authorizes the OEM client based on this code. [see Data Access](#data-access)
 
 With the publication of a Provisioning Certificate to the pool, no information is given automatically to an eMSP. Trusted eMSPs can only retrieve individual Provisioning Certificates if they request them through the PCID.
 
@@ -482,7 +482,7 @@ The update process overwrites the existing Provisioning Certificate with the sam
 
 <!-- theme: info -->
 
-> An update of a Provisioning Certificate in the pool triggers an instant push notification to all eMSPs subscribed to the corresponding WMI if the key pair has changed. See [Webhooks Service](./06_webhook-service.md)
+> An update of a Provisioning Certificate in the pool triggers an instant push notification to all eMSPs subscribed to the corresponding WMI if the key pair has changed. See [Webhooks Service](#webhook-notification-service)
 
 
 ### 3. Delete a Provisioning Certificate
@@ -491,7 +491,7 @@ In case the Provisioning Certificate under one PCID shall be removed from the ec
 
 <!-- theme: info -->
 
-> This operations triggers the Contract Certificate Pool to delete all existing Contract Certificates linked to this Provisioning Certificate. See [Webhooks Service](./06_webhook-service.md)
+> This operations triggers the Contract Certificate Pool to delete all existing Contract Certificates linked to this Provisioning Certificate. See [Webhooks Service](#webhook-notification-service)
 
 
 ### 4. Request a Provisioning Certificate
@@ -504,7 +504,7 @@ This method can be used by the eMSP to determine for a given PCID if a Provision
 
 ## Data Cleansing
 
-The stored OEM Provisioning Certificates are checked regularly with automated processes, expired and revoked certificates will be deleted. The deletion of a provisioning certificate triggers a deletion of all connected Contract Certificates from the [Contract Certificate Pool](./04_contract-certificate-pool.md)
+The stored OEM Provisioning Certificates are checked regularly with automated processes, expired and revoked certificates will be deleted. The deletion of a provisioning certificate triggers a deletion of all connected Contract Certificates from the [Contract Certificate Pool](#contract-certificate-pool)
 
 
 ---
@@ -518,7 +518,7 @@ The CPS provides interfaces for generating and signing contract data of eMSPs. e
 
 The Certificate Provisioning Service can receive and sign contract data through a REST API, using one of the multiple endpoints. The signed data can be optionally stored into Contract Certificate Pool (this is usually the case).
 
-![CPS interfaces](../../assets/images/interfaces_cps.png)
+![CPS interfaces](../assets/images/interfaces_cps.png)
 
 All CPS API documenatation can be found at [cps.v1.json](./../../../specification/apis/cps/cps.api.v1.json).
 
@@ -555,7 +555,7 @@ The Contract Certificate pool can receive contracts by two means:
 
 <!-- theme: info -->
 
-> Publishing a Contract Certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](./06_webhook-service.md)
+> Publishing a Contract Certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](#webhook-notification-service)
 
 ### 2. Update a Contract Certificate
 
@@ -565,7 +565,7 @@ The update process overwrites the existing Contract Certificate with the same EM
 
 <!-- theme: info -->
 
-> An update of a Contract Certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](./06_webhook-service.md)
+> An update of a Contract Certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](#webhook-notification-service)
 
 
 ### 3. Delete a Contract Certificate
@@ -574,7 +574,7 @@ In case the Contract Certificate under one EMAID needs be removed from the ecosy
 
 <!-- theme: info -->
 
-> A deletion of a contract certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](./06_webhook-service.md)
+> A deletion of a contract certificate in the pool can trigger an instant push notification to the OEM enrolled in the WMI corresponding to the contract's PCID. See [Webhooks Service](#webhook-notification-service)
 
 
 ### 4. Retrieving a Contract Certificate
@@ -602,14 +602,14 @@ A Plug&Charge PKI Service includes all necessary components of a PKI infrastruct
 
 These services provide interfaces to CPOs, eMSPs, CPSs and OEMs for issuing/signing certificates and also request certificate statuses.
 
-![Plug&Charge V2G PKI Services Interfaces](../../assets/images/process_V2G_PKI_services.png)
+![Plug&Charge V2G PKI Services Interfaces](../assets/images/process_V2G_PKI_services.png)
 
 
 ## eMSP Plug&Charge Contract Service
 
 eMSP Plug&Charge Contract Service can be part of Plug&Charge CPS Services and provides interfaces for eMSPs to issue and sign their contract certificates/bundles without the need for any own eMSP-PKI. This service creates certificates and performs all needed cryptographic operations to create ISO15118 compliant signed contract data.
 
-![Mobility Operator CA Interfaces](../../assets/images/interfaces_mo-ca_service.png)
+![Mobility Operator CA Interfaces](../assets/images/interfaces_mo-ca_service.png)
 
 
 ## EST interface
@@ -638,19 +638,19 @@ The EST interface of the OPNC Plug&Charge PKI Services is fully compliant with R
 By means of the charge point certificate, the charge point provides its authentication to the vehicle. During a TLS handshake, the charge point establishes a TLS connection to the vehicle. That provides its authentication to the vehicle by sending its charge point certificate and the CPO sub-CA certificates. This certificate chain has been derived from a V2G root CA.
 The associated private key of a charge point certificate is stored in the charge point.
 
-The EVSE leaf certificate contains its EVSE ID as common name, the structure of which is defined in the [identifier description chapter](../05_handling-of-ids.md).
+The EVSE leaf certificate contains its EVSE ID as common name, the structure of which is defined in the [identifier description chapter](#evse-id-electric-vehicle-supply-equipment-id).
 
 ### Contract leaf certificates
 The contract certificate is used in the case of the Plug & Charge authentication and authorisation modes at a charge point, in contrast to external identification means (EIM). It shall be assigned to a valid contractual relationship between the vehicle user (or owner) and mobility operator and shall be saved in the vehicle together with the private key that is associated with this contract certificate.
 
 The electric vehicle accesses this digital certificate in order to prove the existence of a valid charging contract to the charge point. Contract certificates are derived – via intermediate sub-CAs – from eMSP Root CAs or V2G Root CAs.
 
-The eMSP contract certificate contains an EMAID as common name, the structure of which is defined in the [identifier description chapter](../05_handling-of-ids.md)
+The eMSP contract certificate contains an EMAID as common name, the structure of which is defined in the [identifier description chapter](#emaid-e-mobility-authentication-identifier)
 
 ### OEM provisioning certificates
 An OEM provisioning certificate is issued individually for and saved in each electric vehicle. It shall be possible to renew the provisioning certificate in the vehicle if it is revoked. The process of renewing the certificate is specific to each OEM and can be carried out by a workshop or by means of an online process using the OEM backend and telematics link of the EV. It is used to verify the identity of the electric vehicle when provisioning a contract certificate. It is derived from the OEM Root CA or a V2G Root CA via a chain of OEM sub-CAs.
 
-The OEM provisioning certificate contains a PCID as common name, the structure of which is defined in the [identifier description chapter](../05_handling-of-ids.md).
+The OEM provisioning certificate contains a PCID as common name, the structure of which is defined in the [identifier description chapter](#pcid-provisioning-certificate-identifier).
 
 ### CPS provisioning signing certificates
 A CPS provisioning signing certificate is issued regularly for a CPS Operator by a V2G PKI Authority. It shall be possible to renew the provisioning signing certificate. It is used to sign contract data for secure installation into an EV. It is derived from the V2G root CA via a chain of CPS Sub-CAs.
@@ -664,7 +664,7 @@ A certificate authority will use a CSR to create your digital signed certificate
 
 Name|Explanantion|Example
 ----|--------|-----
-Common Name|The unique [ISO15118 description](../05_handling-of-ids.md) for the certificate. This must match exactly to the ISO15118 and VDE Application Guide standard or you will receive a name mismatch error in the PnC Ecosystem|PCID: e.g. WP012345678901234
+Common Name|The unique [ISO15118 description](#handling-of-ids) for the certificate. This must match exactly to the ISO15118 and VDE Application Guide standard or you will receive a name mismatch error in the PnC Ecosystem|PCID: e.g. WP012345678901234
 Organization|	The legal name of your organization. This should not be abbreviated and should include suffixes such as Inc, Corp, or LLC.|CharIN GmbH
 
 #### CSR Example
@@ -704,7 +704,7 @@ Webhooks are particularly useful for asynchronous events like when a `contract c
 
 The following figure provides a high level overview on the interface concept of the webhook service. The service is subscribed to all relevant events within the ecosystem. The partners can register at the webhook service to observe assets in the ecosystem. Relevant events from the other ecosystem components are collected via an event service and forwarded to the partners system.
 
-![Webhook service](../../assets/images/interfaces_event-service.png)
+![Webhook service](../assets/images/interfaces_event-service.png)
 
 ## What are webhooks 
 
